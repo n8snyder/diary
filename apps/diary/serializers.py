@@ -4,8 +4,6 @@ from apps.diary.models import Page
 
 
 class PageSerializer(serializers.HyperlinkedModelSerializer):
-    number = serializers.Field()
-
     class Meta:
         model = Page
         fields = "__all__"
@@ -14,9 +12,14 @@ class PageSerializer(serializers.HyperlinkedModelSerializer):
             "url": {"lookup_field": "number",},
         }
 
+    id = serializers.ReadOnlyField()
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     text = serializers.CharField(
         label="",
         style={"autofocus": True, "rows": 10, "base_template": "textarea.html"},
     )
     number = serializers.ReadOnlyField()
+    date_created = serializers.SerializerMethodField()
+
+    def get_date_created(self, obj):
+        return obj.date_created.date()
