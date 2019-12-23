@@ -2,18 +2,38 @@
 {% load rest_framework %}
 
 {% block content %}
-  <h2>Welcome, {{ user.username }}!</h2>
+
+  <style>
+    .scroll-area.mdl-card {
+      width: 600px;
+      height: 610px;
+      padding-left:150px; 
+      padding-top:100px;
+    }
+    .scroll-area {
+      color: #000;
+      background: url("{{MEDIA_URL}}/scroll.jpg");
+    }
+  </style>
+
+  <h4>Welcome, {{ user.username }}!</h4>
+  <div class="mdl-grid">
+    <div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--2dp" style="margin: 10px 10px 10px 10px;">
   <form action="{% url 'home' %}" method="POST">
       {% csrf_token %}
-      {% render_form serializer template_pack='rest_framework/horizontal' %}
+      <div class="scroll-area mdl-card">
+        <div class="mdl-textfield mdl-js-textfield">
+          <textarea name="text" class="mdl-textfield__input" type="text" rows="20" id="page_text" autofocus style="resize: none;">{{serializer.data.text}}</textarea>
+        </div>
+      </div>
       <input type="hidden" id="pageId" name="id" value={{serializer.data.id}}>
-      <input type="submit" value="Save">
+      <button type="submit" class="mdl-button mdl-button--colored mdl-js-button mdl-button--raised">Save</button>
   </form>
   <h4>
-    <ul>
+    <ul class="mdl-list">
         {% for page in pages %}
-          <li>
-            {{page.date_created}}
+          <li class="mdl-list__item">
+            {{page.date_created}} - 
             <a href={{page.url}}>
               Page {{page.number}}
             </a>
@@ -21,4 +41,6 @@
         {% endfor %}
     </ul>
   </h4>
+</div>
+</div>
 {% endblock %}

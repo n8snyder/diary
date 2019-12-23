@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
 from django.conf.urls import url
+from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+
 
 from apps.user import views as user_views
 from apps.diary import views as diary_views
@@ -33,4 +36,9 @@ urlpatterns = [
     ),
     url(r"^logout/$", auth_views.LogoutView.as_view(next_page="home"), name="logout"),
     url(r"^page/(?P<number>\d+)/$", diary_views.Home.as_view(), name="page-detail"),
-]
+    # url(
+    #     r"^media/(?P<path>.*)$",
+    #     "django.views.static.serve",
+    #     {"document_root": settings.MEDIA_ROOT},
+    # ),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
